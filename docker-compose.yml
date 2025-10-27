@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: journal-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://journal_user:journal_pass@db:5432/journal_db
+      - OLLAMA_HOST=host.docker.internal:11434
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: journal-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    container_name: journal-db
+    environment:
+      - POSTGRES_USER=journal_user
+      - POSTGRES_PASSWORD=journal_pass
+      - POSTGRES_DB=journal_db
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
