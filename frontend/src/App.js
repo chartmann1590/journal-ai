@@ -1,55 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import axios from 'axios';
+import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+import Navigation from './components/Navigation';
+import Home from './components/Home';
+import History from './components/History';
+import Settings from './components/Settings';
+import CalendarView from './components/CalendarView';
+import EntryDetail from './components/EntryDetail';
+
+const API_URL = (process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL !== 'https://localhost')
+  ? process.env.REACT_APP_API_URL
+  : (typeof window !== 'undefined' ? window.location.origin : 'https://localhost');
 
 function App() {
   const [entries, setEntries] = useState([]);
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [isRecording, setIsRecording] = useState(false);
-  const [recognition, setRecognition] = useState(null);
   const [aiStatus, setAiStatus] = useState({ status: 'unknown', models: [] });
-
-  // Initialize speech recognition
-  useEffect(() => {
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      const recognitionInstance = new SpeechRecognition();
-      recognitionInstance.continuous = true;
-      recognitionInstance.interimResults = true;
-      recognitionInstance.lang = 'en-US';
-
-      recognitionInstance.onresult = (event) => {
-        let transcript = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript;
-        }
-        setContent(prevContent => {
-          if (prevContent && !prevContent.endsWith(' ')) {
-            return prevContent + ' ' + transcript;
-          }
-          return prevContent + transcript;
-        });
-      };
-
-      recognitionInstance.onerror = (event) => {
-        console.error('Speech recognition error:', event.error);
-        setError('Voice recording error: ' + event.error);
-        setIsRecording(false);
-      };
-
-      recognitionInstance.onend = () => {
-        setIsRecording(false);
-      };
-
-      setRecognition(recognitionInstance);
-    }
-  }, []);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Load entries and check AI status on mount
   useEffect(() => {
@@ -69,231 +39,109 @@ function App() {
 
   const loadEntries = async () => {
     try {
-      setLoading(true);
       const response = await axios.get(`${API_URL}/api/entries`);
       setEntries(response.data);
-      setError('');
     } catch (err) {
-      setError('Failed to load entries');
-      console.error(err);
-    } finally {
-      setLoading(false);
+      console.error('Error loading entries:', err);
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!content.trim()) {
-      setError('Please enter some content');
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setError('');
-      await axios.post(`${API_URL}/api/entries`, {
-        title: title.trim() || 'Untitled Entry',
-        content: content.trim(),
-      });
-      
-      setSuccess('Entry saved successfully!');
-      setTitle('');
-      setContent('');
-      loadEntries();
-      
-      setTimeout(() => setSuccess(''), 3000);
-    } catch (err) {
-      setError('Failed to save entry');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
+  const handleEntryAdded = () => {
+    loadEntries();
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this entry?')) {
-      return;
-    }
-
-    try {
-      await axios.delete(`${API_URL}/api/entries/${id}`);
-      setSuccess('Entry deleted successfully!');
-      loadEntries();
-      setTimeout(() => setSuccess(''), 3000);
-    } catch (err) {
-      setError('Failed to delete entry');
-      console.error(err);
-    }
+  const handleEntryDeleted = () => {
+    loadEntries();
   };
 
-  const handleAIAnalysis = async (entry) => {
-    try {
-      setLoading(true);
-      const response = await axios.post(`${API_URL}/api/ai/analyze`, {
-        content: entry.content,
-      });
-
-      await axios.put(`${API_URL}/api/entries/${entry.id}`, {
-        ...entry,
-        ai_response: response.data.response,
-      });
-
-      loadEntries();
-      setSuccess('AI analysis completed!');
-      setTimeout(() => setSuccess(''), 3000);
-    } catch (err) {
-      setError('Failed to get AI analysis');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const toggleRecording = () => {
-    if (!recognition) {
-      setError('Speech recognition is not supported in your browser');
-      return;
-    }
-
-    if (isRecording) {
-      recognition.stop();
-      setIsRecording(false);
-    } else {
-      recognition.start();
-      setIsRecording(true);
-      setError('');
-    }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+  const handleEntryUpdated = () => {
+    loadEntries();
   };
 
   return (
-    <div className="App">
-      <header className="header">
-        <h1>🌟 Mental Health Journal</h1>
-        <p>Your safe space for reflection and growth</p>
-      </header>
+    <Router>
+      <div className="App">
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
 
-      <div className="main-content">
-        {/* AI Status */}
-        <div className="ai-status">
-          <div className={`status-indicator ${aiStatus.status === 'connected' ? 'connected' : 'disconnected'}`}></div>
-          <span>
-            AI Status: {aiStatus.status === 'connected' ? 'Connected' : 'Disconnected'}
-            {aiStatus.models && aiStatus.models.length > 0 && 
-              ` (${aiStatus.models.length} model${aiStatus.models.length > 1 ? 's' : ''} available)`
-            }
+        {/* Mobile Menu Button */}
+        <button 
+          className="mobile-menu-btn"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          aria-label="Toggle menu"
+        >
+          <span className={sidebarOpen ? 'hamburger open' : 'hamburger'}>
+            <span></span>
+            <span></span>
+            <span></span>
           </span>
-        </div>
+        </button>
 
-        {/* Messages */}
-        {error && <div className="error">{error}</div>}
-        {success && <div className="success">{success}</div>}
+        {/* Sidebar Overlay */}
+        <div 
+          className={`sidebar-overlay ${sidebarOpen ? 'open' : ''}`}
+          onClick={() => setSidebarOpen(false)}
+        ></div>
 
-        {/* Journal Form */}
-        <form onSubmit={handleSubmit} className="journal-form">
-          <h2>New Journal Entry</h2>
-          
-          <div className="form-group">
-            <label htmlFor="title">Title (Optional)</label>
-            <input
-              type="text"
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Give your entry a title..."
-            />
+        <div className={`sidebar-nav ${sidebarOpen ? 'open' : ''}`}>
+          <div className="logo-section">
+            <div className="logo">JOURNAL</div>
+            <div className="tagline">AI-Powered Mental Health</div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="content">Your Thoughts</label>
-            <textarea
-              id="content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Write or speak your thoughts here..."
-              required
-            />
-          </div>
+          <Navigation onLinkClick={() => setSidebarOpen(false)} />
 
-          <div className="button-group">
-            <button type="submit" className="btn-primary" disabled={loading}>
-              {loading ? 'Saving...' : 'Save Entry'}
-            </button>
-            
-            {recognition && (
-              <button
-                type="button"
-                onClick={toggleRecording}
-                className={`btn-voice ${isRecording ? 'recording' : ''}`}
-              >
-                🎤 {isRecording ? 'Stop Recording' : 'Voice Input'}
-              </button>
-            )}
-            
-            <button
-              type="button"
-              onClick={() => { setTitle(''); setContent(''); }}
-              className="btn-secondary"
-            >
-              Clear
-            </button>
-          </div>
-        </form>
-
-        {/* Entries List */}
-        <div className="entries-list">
-          <h2>Previous Entries</h2>
-          
-          {loading && <div className="loading">Loading...</div>}
-          
-          {entries.length === 0 && !loading && (
-            <p style={{ textAlign: 'center', color: '#999', padding: '20px' }}>
-              No entries yet. Start journaling to see your entries here!
-            </p>
-          )}
-
-          {entries.map((entry) => (
-            <div key={entry.id} className="entry-card">
-              <div className="entry-header">
-                <h3 className="entry-title">{entry.title}</h3>
-                <span className="entry-date">{formatDate(entry.created_at)}</span>
-              </div>
-              
-              <div className="entry-content">{entry.content}</div>
-              
-              {entry.ai_response && (
-                <div className="entry-ai-response">
-                  <h4>💡 AI Insights</h4>
-                  <p>{entry.ai_response}</p>
-                </div>
-              )}
-              
-              <div className="entry-actions">
-                {!entry.ai_response && (
-                  <button
-                    onClick={() => handleAIAnalysis(entry)}
-                    className="btn-info btn-small"
-                    disabled={loading || aiStatus.status !== 'connected'}
-                  >
-                    Get AI Insights
-                  </button>
-                )}
-                <button
-                  onClick={() => handleDelete(entry.id)}
-                  className="btn-danger btn-small"
-                >
-                  Delete
-                </button>
-              </div>
+          <div className="ai-status-sidebar">
+            <div className="status-label">AI Status</div>
+            <div className="status-content">
+              <div className={`status-dot ${aiStatus.status === 'connected' ? 'connected' : 'disconnected'}`}></div>
+              <span className="status-text">
+                {aiStatus.status === 'connected' ? 'Connected' : 'Offline'}
+              </span>
             </div>
-          ))}
+            {aiStatus.models && aiStatus.models.length > 0 && (
+              <div className="models-count">{aiStatus.models.length} models available</div>
+            )}
+          </div>
         </div>
+
+        <main className="main-view">
+          <Routes>
+            <Route
+              path="/"
+              element={<Home entries={entries} onEntryAdded={handleEntryAdded} aiStatus={aiStatus} />}
+            />
+            <Route
+              path="/history"
+              element={
+                <History
+                  entries={entries}
+                  aiStatus={aiStatus}
+                  onEntryDeleted={handleEntryDeleted}
+                  onEntryUpdated={handleEntryUpdated}
+                />
+              }
+            />
+            <Route
+              path="/calendar"
+              element={<CalendarView entries={entries} />}
+            />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/entries/:id" element={<EntryDetail />} />
+          </Routes>
+        </main>
       </div>
-    </div>
+    </Router>
   );
 }
 

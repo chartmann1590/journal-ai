@@ -1,16 +1,30 @@
-version: '3.8'
-
 services:
+  nginx:
+    build: ./nginx
+    container_name: journal-nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - frontend
+      - backend
+    restart: unless-stopped
+
   backend:
     build: ./backend
     container_name: journal-backend
     ports:
-      - "5000:5000"
+      - "5009:5000"
     environment:
-      - DATABASE_URL=postgresql://journal_user:journal_pass@db:5432/journal_db
+      - DATABASE_URL=postgresql://journal_user:journal_pass@db:5432/journal_db?sslmode=disable
       - OLLAMA_HOST=host.docker.internal:11434
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY:-journal-secret-key-change-in-production}
+      - APP_URL=${APP_URL:-https://localhost}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -24,7 +38,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - REACT_APP_API_URL=http://localhost:5000
+      - REACT_APP_API_URL=https://localhost
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -39,8 +53,15 @@ services:
       - POSTGRES_USER=journal_user
       - POSTGRES_PASSWORD=journal_pass
       - POSTGRES_DB=journal_db
+      - POSTGRES_HOST_AUTH_METHOD=md5
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     restart: unless-stopped
+    command: postgres -c 'max_connections=200'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U journal_user -d journal_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

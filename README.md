@@ -1,280 +1,341 @@
-# 🌟 Mental Health Journal Platform
+# Mental Health Journal
 
-An AI-powered online journaling platform designed for mental health and personal reflection. Features voice-to-text capabilities and AI insights powered by local Ollama models.
+A beautiful, modern AI-powered mental health journaling platform with React frontend, Express backend, PostgreSQL database, and Ollama AI integration.
 
 ## Features
 
-- ✍️ **Rich Text Journaling** - Write your thoughts and feelings in a clean, intuitive interface
-- 🎤 **Voice Input** - Speak your journal entries using voice-to-text (Web Speech API)
-- 🤖 **AI Insights** - Get compassionate, supportive insights from local AI models via Ollama
-- 💾 **Persistent Storage** - All entries stored securely in PostgreSQL database
-- 🐳 **Dockerized** - Easy deployment with Docker and Docker Compose
-- 🔒 **Privacy First** - All data stays local, AI runs on your machine via Ollama
+### Core Features
+- **Beautiful, Modern UI** - Gradient design, readable calendar, responsive layout
+- **Voice-to-Text Journaling** - HTTPS mic input with realtime preview, clean finalized text
+- **AI-Powered Insights** - Concise analysis (<120 words) with emotions, pattern, suggestion
+- **Auto Tags & Emotions** - On save, AI generates 3 tags and highlights emotions
+- **Calendar View** - Clear month/week grid, week numbers, quick month/year jump
+- **Search & Filter** - Find entries quickly; filter by text, tags, and emotions
+- **Export Functionality** - Export your journal entries as JSON
 
-## Architecture
+### Email Features
+- **Weekly Email Summaries** - Automatic weekly summaries every Sunday at 6 PM
+- **SMTP Configuration** - Easy setup for any SMTP provider (Gmail, SendGrid, etc.)
+- **Test Email** - Verify your email configuration with a test email
+- **Email Logs** - Track all sent emails and their status
 
-```
-┌─────────────────┐
-│   Frontend      │ (React, Port 3000)
-│   - Journal UI  │
-│   - Voice Input │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│   Backend       │ (Node.js/Express, Port 5000)
-│   - REST API    │
-│   - DB Handler  │
-└────────┬────────┘
-         │
-         ├──────────────────┐
-         ▼                  ▼
-┌─────────────────┐  ┌─────────────────┐
-│   PostgreSQL    │  │   Ollama        │
-│   (Docker)      │  │   (Host)        │
-│   Port 5432     │  │   Port 11434    │
-└─────────────────┘  └─────────────────┘
-```
+### Security
+- **SSL/HTTPS Support** - Self-signed certificates for local development
+- **Encrypted Passwords** - SMTP passwords are encrypted at rest
+- **Secure Database** - All data stored securely in PostgreSQL
+
+## Tech Stack
+
+- **Frontend**: React 18, React Router, React Toastify
+- **Backend**: Express.js, Node.js
+- **Database**: PostgreSQL
+- **AI**: Ollama (llama2 model)
+- **Web Server**: Nginx with SSL
+- **Deployment**: Docker & Docker Compose
 
 ## Prerequisites
 
-- **Docker Desktop** - Already installed on your system
-- **Ollama** - Already installed and running on host machine
-- **Git** - For version control
-- **Node.js** (optional) - Only needed if running outside Docker
+- Docker Desktop installed and running
+- Ollama installed and running locally
+- Ports 443, 3000, 5000, and 5432 available
 
 ## Quick Start
 
-### 1. Verify Ollama is Running
+### 1. Generate SSL Certificates
 
-First, make sure Ollama is running on your host machine:
+First, generate the self-signed SSL certificates for HTTPS:
 
-```powershell
-# Check if Ollama is running
-curl http://localhost:11434/api/tags
+```bash
+# On Mac/Linux
+chmod +x nginx/generate-certs.sh
+./nginx/generate-certs.sh
+
+# On Windows (PowerShell)
+cd nginx
+bash generate-certs.sh
 ```
 
-If you need to pull a model (e.g., llama2):
-
-```powershell
-ollama pull llama2
-```
+**Note**: The browser will show a security warning for the self-signed certificate. This is expected and safe for local development. Click "Advanced" and "Proceed to localhost" to continue.
 
 ### 2. Start the Application
 
-Navigate to the project directory and start all services:
-
-```powershell
-cd H:\journal-ai
-docker-compose up --build
+```bash
+docker compose up -d
 ```
 
-This will:
-- Build the frontend and backend Docker images
-- Start PostgreSQL database
-- Start the backend API server (port 5000)
-- Start the frontend web server (port 3000)
+This will start:
+- **Nginx** on port 443 (HTTPS)
+- **Frontend** on port 3000 (HTTP)
+- **Backend** on port 5000 (HTTP)
+- **Database** on port 5432
 
 ### 3. Access the Application
 
-Open your browser and navigate to:
+Open your browser and go to:
+```
+https://localhost
+```
 
-```
-http://localhost:3000
-```
+Accept the security warning for the self-signed certificate to continue.
 
-The backend API will be available at:
+### 4. Configure Email Settings (Optional)
 
-```
-http://localhost:5000
-```
+1. Navigate to the Settings page using the navigation menu
+2. Enable "Weekly email summaries"
+3. Enter your SMTP configuration:
+   - **Host**: `smtp.gmail.com` (for Gmail)
+   - **Port**: `587`
+   - **Username**: Your email address
+   - **Password**: Your app password (for Gmail, use an App Password)
+   - **From Email**: Your email address
+   - **Recipient Email**: Email address to receive summaries
+4. Click "Save Settings"
+5. Click "Send Test Email" to verify your configuration
+
+## SMTP Configuration Examples
+
+### Gmail
+- Host: `smtp.gmail.com`
+- Port: `587`
+- Username: Your Gmail address
+- Password: Use an [App Password](https://myaccount.google.com/apppasswords) (not your regular password)
+- From Email: Your Gmail address
+
+### SendGrid
+- Host: `smtp.sendgrid.net`
+- Port: `587`
+- Username: `apikey`
+- Password: Your SendGrid API key
+- From Email: Your verified sender email
+
+### Outlook/Hotmail
+- Host: `smtp.office365.com`
+- Port: `587`
+- Username: Your Outlook email
+- Password: Your Outlook password
+- From Email: Your Outlook email
 
 ## Usage
 
-### Writing a Journal Entry
+### Creating Journal Entries
 
-1. **Type** your thoughts in the text area
-2. **Or** click the 🎤 Voice Input button to speak your entry
-3. Add an optional title
-4. Click **Save Entry**
+1. Use the "New Entry" page to write your thoughts
+2. Click the microphone icon to use voice-to-text
+3. Add a title (optional) and write your content
+4. Click "Save Entry"
 
-### Getting AI Insights
+### Viewing History
 
-1. After saving an entry, click **Get AI Insights** button
-2. The AI will analyze your entry and provide supportive feedback
-3. Insights appear below each entry in a blue card
+1. Navigate to "History" from the top menu
+2. Use the search box to find specific entries
+3. Filter and sort entries as needed
+4. Use tag and emotion filters (comma‑separated)
+5. Click an entry to open the detail page
+6. Click "Export JSON" to download all entries
 
-### Voice Recording
+### Entry Detail
 
-- Click the green **Voice Input** button to start recording
-- Speak clearly into your microphone
-- Click **Stop Recording** when finished
-- The transcribed text will appear in the text area
-- You can edit the transcribed text before saving
+- Full content, tags, emotions, and AI insight
+- Edit title/content, Save or Save + Reanalyze All
+- Reanalyze buttons for AI insight or tags/emotions only
 
-## Configuration
+### Calendar View
 
-### Environment Variables
+- Readable calendar with week numbers and clear highlights
+- Click dates to filter entries; has‑entry days show a blue dot
+- Month/year dropdowns on Calendar page for quick navigation
 
-Backend configuration can be modified in `docker-compose.yml` or create a `.env` file:
+### AI Features
 
-```env
-PORT=5000
-DATABASE_URL=postgresql://journal_user:journal_pass@db:5432/journal_db
-OLLAMA_HOST=host.docker.internal:11434
-```
+- Concise analysis (<120 words) with key emotions and a suggestion
+- Auto tags/emotions on save; reanalyze from Entry Detail anytime
 
-### Changing the AI Model
+## Weekly Email Summaries
 
-Edit `backend/server.js` and modify the model name in the Ollama API calls:
+### What You Get
 
-```javascript
-const response = await axios.post(OLLAMA_URL, {
-  model: 'llama2',  // Change to your preferred model
-  prompt: fullPrompt,
-  stream: false,
-});
-```
+Every Sunday at 6 PM (if enabled), you'll receive an email with:
+- Total number of entries for the week
+- Mood trend analysis
+- AI-generated summary of the week's themes and patterns
+- Encouraging, personalized messages
+- Recent entries preview
 
-Available models depend on what you have pulled in Ollama. Common options:
-- `llama2` - General purpose model
-- `mistral` - Fast and capable
-- `neural-chat` - Optimized for conversations
-- `openchat` - Good for empathetic responses
+### Schedule
 
-## API Endpoints
+- **Frequency**: Weekly
+- **Day**: Sunday
+- **Time**: 6:00 PM
+- **Trigger**: Automatically sends if you've created entries during the week
 
-### Journal Entries
+### Manual Send
 
-- `GET /api/entries` - Get all journal entries
-- `GET /api/entries/:id` - Get specific entry
-- `POST /api/entries` - Create new entry
-- `PUT /api/entries/:id` - Update entry
-- `DELETE /api/entries/:id` - Delete entry
-
-### AI Integration
-
-- `POST /api/ai/analyze` - Analyze journal entry
-- `POST /api/ai/chat` - Interactive AI conversation
-- `GET /api/ai/status` - Check Ollama connection status
-
-### Health Check
-
-- `GET /health` - Check API status
+You can manually trigger a weekly summary from the Settings page using the "Send Weekly Summary Now" button.
 
 ## Development
 
-### Running Locally (Without Docker)
+### Project Structure
 
-#### Backend
-
-```powershell
-cd backend
-npm install
-npm start
+```
+journal-ai/
+├── backend/
+│   ├── server.js          # Express API server
+│   ├── services/
+│   │   └── emailService.js # Email sending service
+│   └── utils/
+│       └── encryption.js   # Password encryption
+├── frontend/
+│   └── src/
+│       ├── App.js         # Main app with routing
+│       ├── components/
+│       │   ├── Home.js    # Home page with entry form
+│       │   ├── History.js # History page
+│       │   ├── Settings.js # Settings page
+│       │   └── Navigation.js # Navigation menu
+│       └── index.css      # Styles
+├── nginx/
+│   ├── nginx.conf         # Nginx configuration
+│   ├── Dockerfile         # Nginx container
+│   └── generate-certs.sh  # SSL certificate generation
+└── docker-compose.yml     # Docker orchestration
 ```
 
-#### Frontend
+### Environment Variables
 
-```powershell
-cd frontend
-npm install
-npm start
+Create a `.env` file in the project root:
+
+```env
+# Database
+DATABASE_URL=postgresql://journal_user:journal_pass@db:5432/journal_db
+
+# Ollama
+OLLAMA_HOST=host.docker.internal:11434
+
+# Encryption
+ENCRYPTION_KEY=your-secret-encryption-key-change-in-production
+
+# Application
+APP_URL=https://localhost
 ```
 
-### Stopping the Application
+### Rebuilding Containers
 
-```powershell
-docker-compose down
+```bash
+# Rebuild and restart all containers
+docker compose up -d --build
+
+# Rebuild specific service
+docker compose up -d --build frontend
+docker compose up -d --build backend
 ```
 
-To remove volumes (deletes all data):
+### Viewing Logs
 
-```powershell
-docker-compose down -v
+```bash
+# View all logs
+docker compose logs -f
+
+# View specific service logs
+docker compose logs -f backend
+docker compose logs -f frontend
+docker compose logs -f nginx
+```
+
+### Database Access
+
+```bash
+# Connect to PostgreSQL
+docker exec -it journal-db psql -U journal_user -d journal_db
+
+# Run queries
+SELECT * FROM journal_entries;
+SELECT * FROM user_settings;
+SELECT * FROM email_logs;
 ```
 
 ## Troubleshooting
 
-### Ollama Connection Issues
+### Microphone Not Working
 
-If the AI status shows "Disconnected":
+- Ensure HTTPS (https://localhost) and grant microphone permissions
+- On iOS Safari/Chrome, use the keyboard mic (Web Speech not supported)
+- Realtime preview shows interim; textarea commits finalized phrases only
+- Check browser console for errors
 
-1. Verify Ollama is running: `curl http://localhost:11434/api/tags`
-2. Check if you have models installed: `ollama list`
-3. Ensure Docker can reach host: The `extra_hosts` configuration should allow `host.docker.internal`
+### Email Not Sending
 
-### Voice Input Not Working
+1. Check SMTP configuration in Settings
+2. Click "Send Test Email" to verify connection
+3. Check email logs in backend logs
+4. Verify SMTP provider settings
+5. Check spam/junk folder
 
-- Voice input requires a Chromium-based browser (Chrome, Edge, Brave)
-- Ensure microphone permissions are granted
-- HTTPS is required for production (works on localhost)
+### AI Not Connected
 
-### Database Issues
+1. Ensure Ollama is running locally
+2. Check Ollama host configuration
+3. Verify llama2 model is installed: `ollama pull llama2`
+4. Check backend logs for connection errors
 
-Reset the database:
+### SSL Certificate Warnings
 
-```powershell
-docker-compose down -v
-docker-compose up -d db
-```
+- This is expected for self-signed certificates
+- Click "Advanced" → "Proceed to localhost"
+- Browsers trust only CA-signed certificates
+- For production, use Let's Encrypt
 
-### Port Conflicts
+## API Endpoints
 
-If ports 3000, 5000, or 5432 are already in use, modify the port mappings in `docker-compose.yml`:
+### Entries
+- `GET /api/entries` - Get all entries
+- `POST /api/entries` - Create new entry
+- `GET /api/entries/:id` - Get single entry
+- `PUT /api/entries/:id` - Update entry
+- `DELETE /api/entries/:id` - Delete entry
 
-```yaml
-ports:
-  - "3001:3000"  # Change host port (left side)
-```
+Metadata & Analysis:
+- `POST /api/entries/:id/metadata` - Recompute tags/emotions/keywords
+- `POST /api/entries/:id/analyze` - Recompute concise AI insight
 
-## Data Storage
+### AI
+- `POST /api/ai/analyze` - Analyze entry with AI (concise by default)
+- `GET /api/ai/status` - Check AI connection status
+- `POST /api/ai/chat` - Chat with AI
 
-- **Journal Entries**: Stored in PostgreSQL database
-- **Database Files**: Persisted in `./data/postgres` directory
-- **Backups**: You can backup the `./data` directory
+### Settings
+- `GET /api/settings` - Get settings
+- `POST /api/settings` - Update settings
+- `POST /api/settings/test-email` - Send test email
+- `POST /api/settings/send-summary` - Manually trigger weekly summary
+- `GET /api/email-logs` - Get email logs
 
-## Security Considerations
+## Security Notes
 
-- This is designed for local/personal use
-- For production deployment, add:
-  - User authentication
-  - HTTPS/TLS encryption
-  - Environment variable management
-  - Database password rotation
-  - Rate limiting
-  - Input sanitization
+- Self-signed certificates are for development only
+- Use Let's Encrypt for production
+- SMTP passwords are encrypted using AES-256-CBC
+- Database uses parameterized queries to prevent SQL injection
+- All API requests use HTTPS in production
 
-## Future Enhancements
+## Contributing
 
-- [ ] User authentication and multi-user support
-- [ ] Export entries to PDF/Markdown
-- [ ] Mood tracking and analytics
-- [ ] Calendar view of entries
-- [ ] Tags and categories
-- [ ] Search functionality
-- [ ] Theme customization
-- [ ] Mobile app version
-
-## Tech Stack
-
-- **Frontend**: React 18, Web Speech API, Axios
-- **Backend**: Node.js, Express, PostgreSQL
-- **AI**: Ollama (local LLM)
-- **Database**: PostgreSQL 15
-- **Deployment**: Docker, Docker Compose
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
 ## License
 
-This project is open source and available for personal use.
+MIT License - feel free to use this project for your personal journal.
 
 ## Support
 
 For issues or questions:
-1. Check the troubleshooting section
-2. Review Docker logs: `docker-compose logs`
-3. Verify Ollama is running and models are available
+- Check the troubleshooting section
+- Review backend logs: `docker compose logs backend`
+- Review frontend logs: `docker compose logs frontend`
 
 ---
 
-**Remember**: This journal is your safe space. Write freely, reflect honestly, and be kind to yourself. 💙
+**💙 Remember**: This journal is your safe space. Write freely, reflect honestly, and be kind to yourself.

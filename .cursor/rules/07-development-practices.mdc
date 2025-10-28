@@ -1,0 +1,71 @@
+---
+alwaysApply: true
+description: General development practices and conventions
+---
+
+# Development Practices
+
+## Code Style
+
+### Backend (Node.js/Express)
+- Use ES6+ syntax
+- Prefer async/await over promises
+- Use try-catch for error handling
+- Use parameterized queries for database operations
+- Keep route handlers focused and single-purpose
+
+### Frontend (React)
+- Use functional components with hooks
+- Follow React best practices (keys, conditional rendering)
+- Implement proper loading and error states
+- Use descriptive variable names
+- Keep components modular
+
+## Security
+
+- Never commit sensitive credentials
+- Use environment variables for configuration
+- Use parameterized queries (prevent SQL injection)
+- Implement proper CORS configuration
+- Validate input on both client and server
+
+## Testing
+
+- Test API endpoints manually during development
+- Test AI integration with actual Ollama instance
+- Verify database operations
+- Test cross-browser speech recognition
+- Test error scenarios (AI disconnected, network issues)
+
+## Git Workflow
+
+- Use meaningful commit messages
+- Keep the main branch stable
+- Create feature branches for new functionality
+- Don't commit large files to repository
+- Keep `data/` directory in .gitignore
+
+## Environment Setup
+
+1. Ensure Docker Desktop is running
+2. Ensure Ollama is installed and running locally
+3. Run `docker-compose up` to start all services
+4. Backend: http://localhost:5000
+5. Frontend: http://localhost:3000
+6. Database: localhost:5432
+
+## Debugging
+
+- Check container logs: `docker-compose logs`
+- Frontend logs in browser console
+- Backend logs in terminal
+- Use `docker ps` to check running containers
+- Check `/api/health` and `/api/ai/status` for service health
+
+## Performance
+
+- Use database indexes (id is primary key)
+- Implement pagination for large entry lists (if needed)
+- Optimize images and assets
+- Consider caching strategies for AI responses
+- Monitor API response times

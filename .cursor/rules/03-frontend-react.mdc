@@ -1,0 +1,65 @@
+---
+globs: frontend/**/*
+description: Frontend React architecture and patterns
+---
+
+# Frontend React Guidelines
+
+The frontend is a React 18 application in [frontend/src/](mdc:frontend/src/).
+
+## Main Component
+
+Entry point: [frontend/src/index.js](mdc:frontend/src/index.js)
+Main App: [frontend/src/App.js](mdc:frontend/src/App.js)
+
+## Key Features
+
+### State Management
+- Uses React hooks: `useState`, `useEffect`
+- State includes: entries, form data, loading, error, success messages
+- Speech recognition integration for voice input
+
+### API Integration
+```javascript
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+```
+- Uses axios for HTTP requests
+- All API calls go through backend API
+
+### Speech Recognition
+- Web Speech API integration
+- Continuous and interim results enabled
+- English (en-US) language setting
+- Automatic transcript appending to content
+
+### User Experience
+- Loading states for async operations
+- Success/error message display
+- Confirmation dialogs for destructive actions
+- Real-time AI status indicator
+
+## Component Structure
+
+Single-page application with:
+- Header with title and description
+- AI status indicator
+- Journal entry form
+- Previous entries list
+- Entry actions (AI analysis, delete)
+
+## Styling
+
+CSS file: [frontend/src/index.css](mdc:frontend/src/index.css)
+- Gradient background (#667eea to #764ba2)
+- Card-based layout
+- Button hover effects and animations
+- Responsive design
+- Color-coded UI elements
+
+## Best Practices
+
+- Keep components functional
+- Use proper error handling in async operations
+- Implement loading states for better UX
+- Use semantic HTML
+- Maintain accessibility standards

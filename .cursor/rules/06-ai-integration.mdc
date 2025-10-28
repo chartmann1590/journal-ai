@@ -1,0 +1,72 @@
+---
+description: AI integration with Ollama patterns
+---
+
+# AI Integration Guidelines
+
+The application integrates with Ollama for AI-powered journal analysis.
+
+## Ollama Configuration
+
+Default host: `host.docker.internal:11434`
+API URL: `http://${OLLAMA_HOST}/api/generate`
+Model: `llama2`
+
+## AI Endpoints
+
+### Analyze Endpoint
+`POST /api/ai/analyze`
+- Analyzes journal entry content
+- Provides mental health insights
+- Updates entry with AI response
+- Custom prompts supported
+
+Default prompt:
+```
+You are a compassionate mental health assistant. 
+Analyze this journal entry and provide supportive, empathetic insights. 
+Focus on emotional patterns, positive aspects, and gentle suggestions for well-being.
+```
+
+### Chat Endpoint
+`POST /api/ai/chat`
+- Interactive AI conversation
+- Supports context for conversation history
+- User message-based interaction
+
+### Status Endpoint
+`GET /api/ai/status`
+- Checks Ollama connection
+- Lists available models
+- Used for frontend AI status indicator
+
+## AI Response Structure
+
+```javascript
+{
+  response: string,  // AI-generated text
+  model: string      // Model used
+}
+```
+
+## Error Handling
+
+- Graceful degradation if Ollama unavailable
+- Status endpoint shows connection status
+- User feedback through UI indicators
+- Log errors for debugging
+
+## Frontend Integration
+
+- Real-time AI status indicator in UI
+- "Get AI Insights" button for entries
+- Disabled when AI disconnected
+- Loading states during analysis
+
+## Best Practices
+
+- Use compassionate, supportive language in prompts
+- Handle AI failures gracefully
+- Provide meaningful error messages
+- Cache AI responses in database
+- Never expose Ollama to public internet
