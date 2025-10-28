@@ -135,6 +135,9 @@ title           VARCHAR(255)
 content         TEXT NOT NULL
 ai_response     TEXT
 mood            VARCHAR(50)
+tags            TEXT[]
+emotions        TEXT[]
+emotion_keywords TEXT[]
 created_at      TIMESTAMP
 updated_at      TIMESTAMP
 ```
@@ -168,7 +171,7 @@ created_at      TIMESTAMP
 
 **Connection**:
 - Connection pool managed by `pg` library
-- Health checks configured in docker-compose
+- Health checks configured in docker compose
 - Persistent storage in `data/postgres`
 
 ### 5. Ollama (External)

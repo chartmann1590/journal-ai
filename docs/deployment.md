@@ -66,9 +66,7 @@ sudo certbot renew --dry-run
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 
-# Install Docker Compose
-sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+# Docker Compose v2 is bundled with Docker. Use `docker compose` commands below.
 ```
 
 ### 2. Clone Repository
@@ -141,16 +139,16 @@ services:
 
 ```bash
 # Build images
-docker-compose build
+docker compose build
 
 # Start services
-docker-compose up -d
+docker compose up -d
 
 # Check status
-docker-compose ps
+docker compose ps
 
 # View logs
-docker-compose logs -f
+docker compose logs -f
 ```
 
 ---
@@ -456,7 +454,7 @@ docker exec -i journal-db psql -U journal_user journal_db < db_backup.sql
 docker run --rm -v journal-db_data:/data -v /backups:/backup ubuntu tar xzf /backup/volumes.tar.gz -C /
 
 # Restart services
-docker-compose up -d
+docker compose up -d
 ```
 
 ---
@@ -467,26 +465,26 @@ docker-compose up -d
 
 ```bash
 # Check logs
-docker-compose logs
+docker compose logs
 
 # Check containers
 docker ps -a
 
 # Restart services
-docker-compose restart
+docker compose restart
 ```
 
 ### Database Issues
 
 ```bash
 # Check database logs
-docker-compose logs db
+docker compose logs db
 
 # Test connection
 docker exec -it journal-db psql -U journal_user -d journal_db
 
 # Restart database
-docker-compose restart db
+docker compose restart db
 ```
 
 ### SSL Issues
@@ -499,7 +497,7 @@ sudo certbot certificates
 sudo certbot renew
 
 # Check nginx config
-docker-compose logs nginx
+docker compose logs nginx
 ```
 
 ---

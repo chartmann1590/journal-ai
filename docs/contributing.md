@@ -260,7 +260,7 @@ npm test
 
 # Manual testing
 # Start services and test all features
-docker-compose up
+docker compose up
 ```
 
 ### Documentation

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Mental Health Journal
 
 A beautiful, modern AI-powered mental health journaling platform with React frontend, Express backend, PostgreSQL database, and Ollama AI integration.
@@ -339,3 +340,8 @@ For issues or questions:
 ---
 
 **💙 Remember**: This journal is your safe space. Write freely, reflect honestly, and be kind to yourself.
+=======
+# journal-ai
+
+An online Journaling Platfrom that Leverages AI
+>>>>>>> main
