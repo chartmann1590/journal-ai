@@ -252,8 +252,8 @@ From Email: your-email@outlook.com
 **Solutions**:
 - Ensure Docker Desktop is running
 - Check if ports 443, 3000, 5000, 5432 are available
-- Review logs: `docker-compose logs`
-- Try rebuilding: `docker-compose up -d --build`
+- Review logs: `docker compose logs`
+- Try rebuilding: `docker compose up -d --build`
 
 ### SSL Certificate Errors
 
@@ -274,7 +274,7 @@ From Email: your-email@outlook.com
 - Check if llama2 is installed: `ollama list`
 - Install model: `ollama pull llama2`
 - Verify Ollama host in `.env` file
-- Check backend logs: `docker-compose logs backend`
+- Check backend logs: `docker compose logs backend`
 
 ### Microphone Not Working
 
@@ -294,7 +294,7 @@ From Email: your-email@outlook.com
 - Verify SMTP credentials
 - Check email logs: View logs in Settings page
 - Try different SMTP provider
-- Check backend logs: `docker-compose logs backend`
+- Check backend logs: `docker compose logs backend`
 - Verify network firewall allows SMTP ports
 
 ### Database Connection Issues
@@ -302,9 +302,9 @@ From Email: your-email@outlook.com
 **Issue**: Database errors in logs
 
 **Solutions**:
-- Wait for database to be healthy: `docker-compose ps`
-- Check database logs: `docker-compose logs db`
-- Reset database: `docker-compose down -v` (WARNING: Deletes all data)
+- Wait for database to be healthy: `docker compose ps`
+- Check database logs: `docker compose logs db`
+- Reset database: `docker compose down -v` (WARNING: Deletes all data)
 - Verify DATABASE_URL in environment
 
 ## Development Mode
@@ -323,7 +323,7 @@ npm install
 npm start
 
 # Terminal 3: Start database and nginx
-docker-compose up db nginx
+docker compose up db nginx
 ```
 
 ## Next Steps

@@ -282,8 +282,8 @@ See [Installation Guide](installation.md#smtp-configuration-examples) for other 
 **Solutions**:
 1. Check Ollama is running: `ollama list`
 2. Install llama2: `ollama pull llama2`
-3. Restart backend: `docker-compose restart backend`
-4. Check backend logs: `docker-compose logs backend`
+3. Restart backend: `docker compose restart backend`
+4. Check backend logs: `docker compose logs backend`
 
 ### Can't Save Entries
 

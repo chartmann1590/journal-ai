@@ -344,8 +344,8 @@ nano .env
 sudo apt update && sudo apt upgrade -y
 
 # Update Docker images
-docker-compose pull
-docker-compose up -d --build
+docker compose pull
+docker compose up -d --build
 ```
 
 ---
@@ -356,7 +356,7 @@ docker-compose up -d --build
 
 ```bash
 # View logs
-docker-compose logs -f backend
+docker compose logs -f backend
 
 # Set up log rotation
 cat > /etc/logrotate.d/journal-ai <<EOF

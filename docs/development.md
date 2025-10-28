@@ -416,7 +416,7 @@ console.log('Debug info:', variable);
 debugger;
 
 // Check logs
-docker-compose logs -f backend
+docker compose logs -f backend
 ```
 
 ### Frontend Debugging

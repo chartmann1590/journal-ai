@@ -279,7 +279,7 @@ cat .env | grep OLLAMA_HOST
 
 5. **Check backend logs**:
    ```bash
-   docker-compose logs backend | grep -i email
+  docker compose logs backend | grep -i email
    ```
 
 6. **Common SMTP issues**:
@@ -302,8 +302,8 @@ cat .env | grep OLLAMA_HOST
 
 1. **Check backend is running**:
    ```bash
-   docker-compose ps backend
-   docker-compose logs backend
+  docker compose ps backend
+  docker compose logs backend
    ```
 
 2. **Check browser console**:
@@ -458,7 +458,7 @@ services:
 
 ### Before Asking
 
-1. Check logs: `docker-compose logs -f`
+1. Check logs: `docker compose logs -f`
 2. Search existing issues
 3. Review this troubleshooting guide
 4. Check documentation
@@ -467,7 +467,7 @@ services:
 
 ```bash
 # Full system status
-docker-compose ps
+docker compose ps
 docker stats
 df -h
 
@@ -477,7 +477,7 @@ curl https://localhost/api/ai/status
 docker exec journal-db pg_isready
 
 # View all logs
-docker-compose logs > logs.txt
+docker compose logs > logs.txt
 ```
 
 ### Debug Mode
@@ -486,7 +486,7 @@ Enable debug logging:
 
 ```bash
 # Backend debug
-DEBUG=* docker-compose up backend
+DEBUG=* docker compose up backend
 
 # Frontend debug
 REACT_APP_DEBUG=true npm start
@@ -502,16 +502,16 @@ REACT_APP_DEBUG=true npm start
 
 ```bash
 # Stop all services
-docker-compose down
+docker compose down
 
 # Remove all volumes (deletes data)
-docker-compose down -v
+docker compose down -v
 
 # Remove images
-docker-compose rm -f
+docker compose rm -f
 
 # Start fresh
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
 ### Restore from Backup
@@ -521,7 +521,7 @@ docker-compose up -d --build
 docker exec -i journal-db psql -U journal_user journal_db < backup.sql
 
 # Restart services
-docker-compose restart
+docker compose restart
 ```
 
 ---
