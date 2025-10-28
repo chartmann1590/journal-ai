@@ -101,7 +101,7 @@ APP_URL=https://localhost
 Start all services with Docker Compose:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 This command will:
@@ -137,7 +137,7 @@ To proceed:
 ### Check Running Containers
 
 ```bash
-docker-compose ps
+docker compose ps
 ```
 
 You should see 4 containers running:
@@ -150,12 +150,12 @@ You should see 4 containers running:
 
 ```bash
 # All logs
-docker-compose logs -f
+docker compose logs -f
 
 # Specific service
-docker-compose logs -f backend
-docker-compose logs -f frontend
-docker-compose logs -f nginx
+docker compose logs -f backend
+docker compose logs -f frontend
+docker compose logs -f nginx
 ```
 
 ### Check Database

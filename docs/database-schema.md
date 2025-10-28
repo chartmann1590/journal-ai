@@ -249,13 +249,13 @@ docker exec -i journal-db psql -U journal_user journal_db < backup.sql
 
 ```bash
 # Stop containers
-docker-compose down
+docker compose down
 
 # Remove volumes
-docker-compose down -v
+docker compose down -v
 
 # Start fresh
-docker-compose up -d
+docker compose up -d
 ```
 
 ### View Database Size

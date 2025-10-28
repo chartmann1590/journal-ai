@@ -8,29 +8,29 @@ Common issues and their solutions for Journal AI.
 
 ```bash
 # Check all containers
-docker-compose ps
+docker compose ps
 
 # Check specific service
-docker-compose ps backend
+docker compose ps backend
 ```
 
 ### View Logs
 
 ```bash
 # All logs
-docker-compose logs -f
+docker compose logs -f
 
 # Backend logs
-docker-compose logs -f backend
+docker compose logs -f backend
 
 # Frontend logs
-docker-compose logs -f frontend
+docker compose logs -f frontend
 
 # Nginx logs
-docker-compose logs -f nginx
+docker compose logs -f nginx
 
 # Database logs
-docker-compose logs -f db
+docker compose logs -f db
 ```
 
 ---
@@ -47,11 +47,11 @@ docker-compose logs -f db
 
 ```bash
 # Check logs
-docker-compose logs backend
+docker compose logs backend
 
 # Rebuild containers
-docker-compose down
-docker-compose up -d --build
+docker compose down
+docker compose up -d --build
 
 # Check port availability
 netstat -an | grep 443
@@ -101,7 +101,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -subj "/C=US/ST=State/L=City/O=Organization/CN=localhost"
 
 # Restart nginx
-docker-compose restart nginx
+docker compose restart nginx
 ```
 
 **Production**:
@@ -134,20 +134,20 @@ sudo certbot renew --dry-run
 
 ```bash
 # Check database is running
-docker-compose ps db
+docker compose ps db
 
 # Restart database
-docker-compose restart db
+docker compose restart db
 
 # Check database logs
-docker-compose logs db
+docker compose logs db
 
 # Test connection
 docker exec -it journal-db psql -U journal_user -d journal_db
 
 # Reset database (WARNING: Deletes all data)
-docker-compose down -v
-docker-compose up -d
+docker compose down -v
+docker compose up -d
 
 # Check connection string in .env
 cat .env | grep DATABASE_URL

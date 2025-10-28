@@ -33,8 +33,8 @@ Welcome to the Journal AI comprehensive documentation. This documentation covers
 
 For issues or questions:
 - Check the [Troubleshooting Guide](troubleshooting.md)
-- Review backend logs: `docker-compose logs backend`
-- Review frontend logs: `docker-compose logs frontend`
+- Review backend logs: `docker compose logs backend`
+- Review frontend logs: `docker compose logs frontend`
 
 ---
 
