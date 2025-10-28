@@ -559,7 +559,7 @@ location ~* \.(jpg|jpeg|png|gif|ico|css|js)$ {
 
 If you encounter issues:
 
-1. Check logs: `docker-compose logs`
+1. Check logs: `docker compose logs`
 2. Review this guide's troubleshooting section
 3. Check GitHub issues
 4. Review backend logs specifically
