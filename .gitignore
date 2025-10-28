@@ -20,6 +20,7 @@ ENV/
 *.sqlite
 *.sqlite3
 data/*.db
+data/postgres/
 
 # Environment variables
 .env
