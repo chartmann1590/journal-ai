@@ -1,0 +1,12 @@
+{
+  "name": "Journal AI",
+  "short_name": "JournalAI",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#111318",
+  "background_color": "#111318",
+  "description": "AI-assisted journaling platform",
+  "icons": []
+}
+

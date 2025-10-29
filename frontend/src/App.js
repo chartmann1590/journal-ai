@@ -11,6 +11,7 @@ import History from './components/History';
 import Settings from './components/Settings';
 import CalendarView from './components/CalendarView';
 import EntryDetail from './components/EntryDetail';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
 
 const API_URL = (process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL !== 'https://localhost')
   ? process.env.REACT_APP_API_URL
@@ -61,6 +62,7 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <PWAInstallPrompt />
         <ToastContainer
           position="top-right"
           autoClose={3000}
