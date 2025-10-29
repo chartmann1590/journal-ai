@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_quick_entry_label">Journal AI — New Entry</string>
+    <string name="widget_quick_jot_label">Journal AI — Quick Jot</string>
+    <string name="widget_history_label">Journal AI — History</string>
+    <string name="widget_calendar_label">Journal AI — Calendar</string>
+</resources>
+

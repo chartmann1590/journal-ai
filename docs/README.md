@@ -21,6 +21,9 @@ Welcome to the Journal AI comprehensive documentation. This documentation covers
 - **[Mobile Build & Release](mobile-build-release.md)** - Building APKs and staging downloads
 - **[Mobile Quick Start](mobile-quickstart.md)** - Fast setup and verification
 
+### Planning
+- **[Improvement Plan](improvement-plan.md)** - Ideas and suggestions for future work
+
 ### Operations
 - **[Deployment Guide](deployment.md)** - Production deployment instructions
 - **[Security](security.md)** - Security best practices and considerations

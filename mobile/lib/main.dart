@@ -210,6 +210,29 @@ class _MainNavState extends State<MainNav> {
     BottomNavigationBarItem(icon: Icon(Icons.cloud_outlined), activeIcon: Icon(Icons.cloud), label: 'Server'),
   ];
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final sp = await SharedPreferences.getInstance();
+      final pendingTab = sp.getInt('pending_open_tab');
+      if (pendingTab != null) {
+        setState(() { idx = pendingTab.clamp(0, pages.length - 1); });
+        await sp.remove('pending_open_tab');
+        final entryId = sp.getInt('pending_open_entry');
+        if (entryId != null) {
+          await sp.remove('pending_open_entry');
+          // push entry detail after tab switch
+          if (mounted) {
+            await Future<void>.delayed(const Duration(milliseconds: 50));
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => EntryDetailScreen(entryId: entryId)),
+            );
+          }
+        }
+      }
+    });
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(child: pages[idx]),
@@ -350,7 +373,27 @@ class _HomePageState extends State<HomePage> {
   // Voice dictation via Android keyboard mic (OS feature) recommended.
   Future<void> _checkPendingPrompt() async {
     final sp = await SharedPreferences.getInstance();
+    final quick = sp.getBool('pending_quick_jot') ?? false;
     final pending = sp.getBool('pending_open_home') ?? false;
+    if (quick) {
+      final app = context.read<AppState>();
+      try {
+        final msg = await app.api?.motivate();
+        if ((msg ?? '').isNotEmpty) {
+          setState(() { contentCtrl.text = msg!; });
+          showSnack(context, 'Quick jot prompt loaded');
+        } else {
+          setState(() { contentCtrl.text = _quickJotTemplate(); });
+        }
+      } catch (e) {
+        AppLog.add('Home: quickJot motivate ERROR $e');
+        setState(() { contentCtrl.text = _quickJotTemplate(); });
+      } finally {
+        await sp.setBool('pending_quick_jot', false);
+        await sp.setBool('pending_open_home', false);
+      }
+      return;
+    }
     if (pending) {
       final app = context.read<AppState>();
       try {
@@ -367,6 +410,11 @@ class _HomePageState extends State<HomePage> {
         await sp.setBool('pending_open_home', false);
       }
     }
+  }
+
+  String _quickJotTemplate() {
+    final today = DateFormat('EEE, MMM d').format(DateTime.now());
+    return 'Quick jot — ' + today + '\n\nGrateful for: \nFeeling: \nNotable events: \nOne thought: ';
   }
 
   @override
@@ -732,7 +780,18 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => load());
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final sp = await SharedPreferences.getInstance();
+      final dateStr = sp.getString('pending_calendar_date');
+      if (dateStr != null && dateStr.isNotEmpty) {
+        try {
+          final d = DateTime.parse(dateStr).toLocal();
+          setState(() { focusedDay = d; selectedDay = d; });
+          await sp.remove('pending_calendar_date');
+        } catch (_) {}
+      }
+      await load();
+    });
   }
 
   Future<void> load() async {

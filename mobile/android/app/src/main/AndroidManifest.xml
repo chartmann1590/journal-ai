@@ -11,14 +11,64 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <receiver
+            android:name=".QuickEntryWidgetProvider"
+            android:label="@string/widget_quick_entry_label"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.example.journal_ai_mobile.OPEN_NEW_ENTRY" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/quick_entry_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".QuickJotWidgetProvider"
+            android:label="@string/widget_quick_jot_label"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.example.journal_ai_mobile.QUICK_JOT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/quick_jot_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".HistoryWidgetProvider"
+            android:label="@string/widget_history_label"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/history_widget_info" />
+        </receiver>
+        <service
+            android:name=".HistoryWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="false" />
+        
         <activity
-            android:name="io.flutter.embedding.android.FlutterActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="journalai" android:host="app" android:path="/new" />
+                <data android:scheme="journalai" android:host="app" android:path="/jot" />
+                <data android:scheme="journalai" android:host="app" android:path="/history" />
+                <data android:scheme="journalai" android:host="app" android:path="/calendar" />
+                <data android:scheme="journalai" android:host="app" android:path="/entry" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

@@ -55,6 +55,13 @@ Notifications Tab
 - Shows a history of notification events: time, source (immediate/prompt/bg), success/error
 - Actions to dismiss all system notifications and clear history
 
+Home Screen Widgets
+- Quick New Entry: opens the app directly to the New Entry screen
+- Quick Jot: opens New Entry and pre-fills with a short AI prompt (or a light template if offline)
+
+Deep Links
+- Custom scheme `journalai://app/new` opens the app to New Entry and triggers Quick Jot prefill
+
 ## Building (Release APK)
 
 Prereqs:
@@ -114,4 +121,3 @@ Artifacts:
 - The app stores only local preferences (server URL, switches, times) on-device
 - All personal journal data is stored on the server
 - Use HTTPS with valid certs in production (self-signed only for development)
-
