@@ -347,6 +347,8 @@ For issues or questions:
 - Mobile app: docs/mobile-app.md
 - Mobile notifications: docs/mobile-notifications.md
 - Mobile build & release: docs/mobile-build-release.md
+- Mobile quick start: docs/mobile-quickstart.md
+ - Changelog: CHANGELOG.md
 
 ## Components
 

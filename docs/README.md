@@ -19,6 +19,7 @@ Welcome to the Journal AI comprehensive documentation. This documentation covers
 - **[Mobile App](mobile-app.md)** - Android client overview and features
 - **[Mobile Notifications](mobile-notifications.md)** - Notification architecture and debugging
 - **[Mobile Build & Release](mobile-build-release.md)** - Building APKs and staging downloads
+- **[Mobile Quick Start](mobile-quickstart.md)** - Fast setup and verification
 
 ### Operations
 - **[Deployment Guide](deployment.md)** - Production deployment instructions
