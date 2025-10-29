@@ -38,6 +38,15 @@ function Navigation({ onLinkClick }) {
           <span className="nav-icon">⚙️</span>
           <span className="nav-text">Settings</span>
         </Link>
+        <a
+          href="/apk/latest.apk"
+          className="nav-link"
+          onClick={handleClick}
+          download
+        >
+          <span className="nav-icon">📦</span>
+          <span className="nav-text">Download Android APK</span>
+        </a>
       </div>
     </nav>
   );

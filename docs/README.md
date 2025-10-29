@@ -15,6 +15,11 @@ Welcome to the Journal AI comprehensive documentation. This documentation covers
 - **[Database Schema](database-schema.md)** - Database structure and relationships
 - **[Development Guide](development.md)** - Development setup and guidelines
 
+### Mobile App
+- **[Mobile App](mobile-app.md)** - Android client overview and features
+- **[Mobile Notifications](mobile-notifications.md)** - Notification architecture and debugging
+- **[Mobile Build & Release](mobile-build-release.md)** - Building APKs and staging downloads
+
 ### Operations
 - **[Deployment Guide](deployment.md)** - Production deployment instructions
 - **[Security](security.md)** - Security best practices and considerations

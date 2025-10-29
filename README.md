@@ -1,7 +1,6 @@
-<<<<<<< HEAD
-# Mental Health Journal
+# Journal AI
 
-A beautiful, modern AI-powered mental health journaling platform with React frontend, Express backend, PostgreSQL database, and Ollama AI integration.
+An AI‑assisted journaling platform with a modern web app, an Android mobile client, and an Express/Postgres backend that integrates with Ollama for analysis and nudges.
 
 ## Features
 
@@ -340,8 +339,52 @@ For issues or questions:
 ---
 
 **💙 Remember**: This journal is your safe space. Write freely, reflect honestly, and be kind to yourself.
-=======
-# journal-ai
+## Quick Links
 
-An online Journaling Platfrom that Leverages AI
->>>>>>> main
+- Docs index: docs/README.md
+- API reference: docs/api-reference.md
+- Architecture: docs/architecture.md
+- Mobile app: docs/mobile-app.md
+- Mobile notifications: docs/mobile-notifications.md
+- Mobile build & release: docs/mobile-build-release.md
+
+## Components
+
+- Frontend: React SPA (served via Nginx)
+- Backend: Node/Express, integrates with Ollama
+- Database: PostgreSQL
+- Mobile: Flutter (Android APK served from /apk/latest.apk)
+
+## Run Locally (Docker)
+
+1) Generate self‑signed certs for HTTPS
+2) Start services: `docker compose up -d`
+3) Open https://localhost (accept the cert warning in development)
+
+## Mobile App
+
+- Download the latest Android APK from your site at /apk/latest.apk
+- Configure the app to point at your server (Server tab → Save & Connect)
+- See docs/mobile-app.md for features, permissions, notifications, and troubleshooting
+
+## Notifications (Mobile)
+
+- Daily reminders are scheduled via WorkManager (compat) and run every day at your chosen time
+- At trigger, the app fetches a short AI message (POST /api/ai/motivate) and posts a notification
+- The Notifications tab shows a history and lets you clear history and dismiss system notifications
+
+## Build APK
+
+- Windows: ./scripts/build_apk_and_stage.ps1
+- macOS/Linux: bash scripts/build_apk_and_stage.sh
+- Staged to frontend/public/apk/latest.apk so it’s downloadable from /apk/latest.apk
+
+## Troubleshooting
+
+- Check docs: docs/troubleshooting.md and docs/mobile-notifications.md
+- Backend/Ollama status: docker compose logs backend
+- Frontend: docker compose logs frontend
+
+## License
+
+MIT

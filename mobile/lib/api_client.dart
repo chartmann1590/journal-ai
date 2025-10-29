@@ -11,8 +11,9 @@ class ApiClient {
   ApiClient({required this.baseUrl, this.trustSelfSigned = false})
       : _dio = Dio(BaseOptions(
           baseUrl: baseUrl,
-          connectTimeout: const Duration(seconds: 20),
-          receiveTimeout: const Duration(seconds: 30),
+          connectTimeout: const Duration(seconds: 25),
+          receiveTimeout: const Duration(seconds: 120),
+          sendTimeout: const Duration(seconds: 60),
           headers: {HttpHeaders.contentTypeHeader: 'application/json'},
         )) {
     if (trustSelfSigned) {
@@ -81,6 +82,12 @@ class ApiClient {
     return res.data as Map<String, dynamic>;
   }
 
+  // Motivation message
+  Future<String> motivate({String? name}) async {
+    final res = await _dio.post('/api/ai/motivate', data: name != null ? {'name': name} : {});
+    return (res.data as Map<String, dynamic>)['message']?.toString() ?? '';
+  }
+
   // Settings
   Future<Map<String, dynamic>> getSettings() async {
     final res = await _dio.get('/api/settings');
@@ -101,4 +108,3 @@ class ApiClient {
     return res.data as Map<String, dynamic>;
   }
 }
-

@@ -401,6 +401,28 @@ app.post('/api/ai/analyze', async (req, res) => {
   }
 });
 
+// Short daily motivation message
+app.post('/api/ai/motivate', async (req, res) => {
+  try {
+    const { name } = req.body || {};
+    console.log('[motivate] request body', req.body);
+    const ollamaHost = await getOllamaHost();
+    const ollamaModel = await getOllamaModel();
+    const prompt = `Give a single short, encouraging journaling nudge under 25 words${name ? ` for ${name}` : ''}. Be friendly and motivating. No preamble, no quotes.`;
+    const response = await axios.post(`http://${ollamaHost}/api/generate`, {
+      model: ollamaModel,
+      prompt,
+      stream: false,
+    });
+    const message = (response.data && response.data.response || '').trim();
+    console.log('[motivate] host', ollamaHost, 'model', ollamaModel, 'len', message.length, 'msg', message);
+    res.json({ message });
+  } catch (err) {
+    console.error('Error generating motivation:', err.message);
+    res.status(500).json({ error: 'Failed to generate message' });
+  }
+});
+
 // AI Chat endpoint - Interactive conversation
 app.post('/api/ai/chat', async (req, res) => {
   try {
