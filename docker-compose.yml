@@ -33,15 +33,14 @@ services:
     restart: unless-stopped
 
   frontend:
-    build: ./frontend
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
     container_name: journal-frontend
     ports:
       - "3000:3000"
     environment:
       - REACT_APP_API_URL=https://localhost
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
     depends_on:
       - backend
     restart: unless-stopped
