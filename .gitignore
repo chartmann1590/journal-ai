@@ -33,6 +33,16 @@ data/postgres/
 *.swo
 *~
 
+# Editor/agent tooling
+.cursor/
+.cursorrules
+CLAUDE.md
+WARP.md
+.warp/
+warp/
+.claude/
+claude/
+
 # OS
 .DS_Store
 Thumbs.db
