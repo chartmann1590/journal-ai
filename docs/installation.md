@@ -35,7 +35,7 @@ Before you begin, ensure you have the following installed:
 If you haven't already:
 
 ```bash
-git clone https://github.com/your-repo/journal-ai.git
+git clone http://10.0.0.129:3000/charles/journal-ai.git
 cd journal-ai
 ```
 

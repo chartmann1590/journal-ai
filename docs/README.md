@@ -14,6 +14,8 @@ Welcome to the Journal AI comprehensive documentation. This documentation covers
 - **[API Reference](api-reference.md)** - Complete API documentation
 - **[Database Schema](database-schema.md)** - Database structure and relationships
 - **[Development Guide](development.md)** - Development setup and guidelines
+ - **[PWA Guide](pwa.md)** - Install UX, splash, offline, and assets
+ - **[Testing Guide](testing.md)** - Playwright setup and coverage
 
 ### Mobile App
 - **[Mobile App](mobile-app.md)** - Android client overview and features
@@ -34,9 +36,13 @@ Welcome to the Journal AI comprehensive documentation. This documentation covers
 
 ## Quick Links
 
-- [Project GitHub Repository](https://github.com/your-repo/journal-ai)
+- [Gitea Repository](http://10.0.0.129:3000/charles/journal-ai)
 - [Main README](../README.md)
 - [Docker Compose Configuration](../docker-compose.yml)
+
+### PWA & Testing
+- PWA: install button in menu, maskable icons, offline app shell, animated splash (5s minimum)
+- E2E tests (Playwright): run `cd frontend && npx playwright install && npm run test:e2e`
 
 ## Support
 
