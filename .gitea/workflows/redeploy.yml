@@ -1,0 +1,26 @@
+name: Redeploy Frontend PWA
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'frontend/**'
+      - 'mobile/web/icons/**'
+      - 'docker-compose.yml'
+
+jobs:
+  redeploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Docker version
+        run: docker version
+
+      - name: Rebuild and restart stack
+        run: |
+          bash scripts/rebuild_frontend.sh
+        shell: bash
+

@@ -1,7 +1,12 @@
-const CACHE_NAME = 'journalai-v1';
+const CACHE_NAME = 'journalai-v2';
 const APP_SHELL = [
   '/',
-  '/index.html'
+  '/index.html',
+  '/manifest.json',
+  '/icons/Icon-192.png',
+  '/icons/Icon-512.png',
+  '/icons/Icon-maskable-192.png',
+  '/icons/Icon-maskable-512.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -56,4 +61,3 @@ self.addEventListener('fetch', (event) => {
     );
   }
 });
-

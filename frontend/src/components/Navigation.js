@@ -34,6 +34,17 @@ function Navigation({ onLinkClick }) {
 
       <div className="nav-section">
         <div className="nav-section-title">SYSTEM</div>
+        <button
+          type="button"
+          className="nav-link"
+          onClick={() => {
+            try { window.dispatchEvent(new Event('pwa:show-prompt')); } catch (e) {}
+            handleClick();
+          }}
+        >
+          <span className="nav-icon">📱</span>
+          <span className="nav-text">Install App</span>
+        </button>
         <Link to="/settings" className={`nav-link ${isActive('/settings') ? 'active' : ''}`} onClick={handleClick}>
           <span className="nav-icon">⚙️</span>
           <span className="nav-text">Settings</span>

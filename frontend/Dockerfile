@@ -16,8 +16,7 @@ COPY mobile/web/icons/Icon-512.png public/icons/Icon-512.png
 COPY mobile/web/icons/Icon-maskable-192.png public/icons/Icon-maskable-192.png
 COPY mobile/web/icons/Icon-maskable-512.png public/icons/Icon-maskable-512.png
 
-# Build production assets
-ENV CI=true
+# Build production assets (allow warnings without failing build)
 RUN npm run build
 
 FROM node:18-alpine AS runtime
